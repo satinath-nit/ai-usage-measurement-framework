@@ -5,7 +5,8 @@ Measure and analyze AI-assisted development in git repositories. Track usage of 
 ## Demo
 
 Watch the demo video to see the AI Usage Measurement Framework in action:
-<video src="https://github.com/satinath-nit/ai-usage-measurement-framework/blob/90fad9975b8aeacfadd500233194368f8cd26db6/demo.mov"></video>
+
+<video src="https://github.com/user-attachments/assets/de4ea3b2-fb20-43bc-85c4-54c006768598"></video>
 
 *Demo video file is included in the package as `demo.mp4`*
 
