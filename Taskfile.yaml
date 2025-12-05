@@ -1,0 +1,246 @@
+# https://taskfile.dev
+# AI Usage Measurement Framework - Task Automation
+
+version: '3'
+
+vars:
+  PYTHON: uv run python
+  STREAMLIT_PORT: 8501
+
+tasks:
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list
+
+  # ============================================================================
+  # Setup & Installation
+  # ============================================================================
+
+  setup:
+    desc: Install all dependencies (including dev tools)
+    cmds:
+      - uv sync
+      - echo "Setup complete! Run 'task check' to verify installation."
+
+  setup:prod:
+    desc: Install production dependencies only
+    cmds:
+      - uv sync --no-dev
+
+  # ============================================================================
+  # Development
+  # ============================================================================
+
+  lint:
+    desc: Run linter (ruff)
+    cmds:
+      - uv run ruff check .
+
+  lint:fix:
+    desc: Fix linting issues automatically
+    cmds:
+      - uv run ruff check . --fix
+
+  format:
+    desc: Format code with ruff
+    cmds:
+      - uv run ruff format .
+
+  typecheck:
+    desc: Run type checker (mypy)
+    cmds:
+      - uv run mypy src/
+
+  test:
+    desc: Run test suite
+    cmds:
+      - uv run pytest
+
+  test:cov:
+    desc: Run tests with coverage report
+    cmds:
+      - uv run pytest --cov=ai_usage_measurement_framework --cov-report=term-missing
+
+  test:watch:
+    desc: Run tests in watch mode
+    cmds:
+      - uv run pytest --watch
+
+  check:
+    desc: Run all checks (lint, typecheck, test)
+    cmds:
+      - task: lint
+      - task: typecheck
+      - task: test
+      - echo "All checks passed!"
+
+  # ============================================================================
+  # Application
+  # ============================================================================
+
+  webapp:
+    desc: Launch Streamlit web application
+    cmds:
+      - uv run streamlit run src/ai_usage_measurement_framework/webapp/app.py --server.port {{.STREAMLIT_PORT}}
+
+  webapp:dev:
+    desc: Launch Streamlit web app with auto-reload
+    cmds:
+      - uv run streamlit run src/ai_usage_measurement_framework/webapp/app.py --server.port {{.STREAMLIT_PORT}} --server.runOnSave true
+
+  webapp:public:
+    desc: Launch Streamlit web app accessible from network
+    cmds:
+      - uv run streamlit run src/ai_usage_measurement_framework/webapp/app.py --server.port {{.STREAMLIT_PORT}} --server.address 0.0.0.0
+
+  cli:
+    desc: Show CLI help
+    cmds:
+      - uv run ai-usage-measurement-framework --help
+
+  version:
+    desc: Show package version
+    cmds:
+      - uv run ai-usage-measurement-framework --version
+
+  # ============================================================================
+  # Analysis Commands
+  # ============================================================================
+
+  analyze:
+    desc: Analyze a repository (pass REPO as argument)
+    cmds:
+      - uv run ai-usage-measurement-framework analyze {{.CLI_ARGS}}
+    requires:
+      vars: [CLI_ARGS]
+
+  analyze:local:
+    desc: Analyze a local repository
+    vars:
+      REPO: '{{.REPO | default "."}}'
+    cmds:
+      - uv run ai-usage-measurement-framework analyze {{.REPO}}
+
+  teams:
+    desc: List GitHub teams for an organization
+    cmds:
+      - uv run ai-usage-measurement-framework teams {{.CLI_ARGS}}
+    requires:
+      vars: [CLI_ARGS]
+
+  team:
+    desc: Analyze all repos for a GitHub team
+    cmds:
+      - uv run ai-usage-measurement-framework team {{.CLI_ARGS}}
+    requires:
+      vars: [CLI_ARGS]
+
+  # ============================================================================
+  # Build & Release
+  # ============================================================================
+
+  build:
+    desc: Build package
+    cmds:
+      - uv build
+
+  build:wheel:
+    desc: Build wheel only
+    cmds:
+      - uv build --wheel
+
+  publish:
+    desc: Publish to PyPI (requires credentials)
+    cmds:
+      - uv publish
+
+  publish:test:
+    desc: Publish to Test PyPI
+    cmds:
+      - uv publish --repository testpypi
+
+  # ============================================================================
+  # Cleanup
+  # ============================================================================
+
+  clean:
+    desc: Clean build artifacts and caches
+    cmds:
+      - rm -rf dist/
+      - rm -rf build/
+      - rm -rf *.egg-info/
+      - rm -rf .pytest_cache/
+      - rm -rf .mypy_cache/
+      - rm -rf .ruff_cache/
+      - rm -rf __pycache__/
+      - find . -type d -name "__pycache__" -exec rm -rf {} + 2>/dev/null || true
+      - find . -type f -name "*.pyc" -delete 2>/dev/null || true
+      - echo "Cleaned build artifacts and caches"
+
+  clean:all:
+    desc: Clean everything including virtual environment
+    cmds:
+      - task: clean
+      - rm -rf .venv/
+      - echo "Cleaned all including virtual environment"
+
+  # ============================================================================
+  # Docker (optional)
+  # ============================================================================
+
+  docker:build:
+    desc: Build Docker image
+    cmds:
+      - docker build -t ai-usage-measurement-framework .
+
+  docker:run:
+    desc: Run Docker container
+    cmds:
+      - docker run -p {{.STREAMLIT_PORT}}:{{.STREAMLIT_PORT}} ai-usage-measurement-framework
+
+  # ============================================================================
+  # Documentation
+  # ============================================================================
+
+  docs:serve:
+    desc: Serve documentation locally (if using mkdocs)
+    cmds:
+      - uv run mkdocs serve
+
+  docs:build:
+    desc: Build documentation
+    cmds:
+      - uv run mkdocs build
+
+  # ============================================================================
+  # Utilities
+  # ============================================================================
+
+  deps:update:
+    desc: Update all dependencies
+    cmds:
+      - uv lock --upgrade
+      - uv sync
+
+  deps:tree:
+    desc: Show dependency tree
+    cmds:
+      - uv tree
+
+  env:
+    desc: Show environment info
+    cmds:
+      - echo "Python version:"
+      - uv run python --version
+      - echo ""
+      - echo "uv version:"
+      - uv --version
+      - echo ""
+      - echo "Package version:"
+      - uv run ai-usage-measurement-framework --version 2>/dev/null || echo "Package not installed"
+
+  shell:
+    desc: Open Python shell with package loaded
+    cmds:
+      - uv run python -c "from ai_usage_measurement_framework import *; import code; code.interact(local=locals())"
