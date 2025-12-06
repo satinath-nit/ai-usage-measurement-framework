@@ -6,9 +6,10 @@ Measure and analyze AI-assisted development in git repositories. Track usage of 
 
 Watch the demo video to see the AI Usage Measurement Framework in action:
 
-https://github.com/user-attachments/assets/demo-video.mp4
+<video src="https://github.com/user-attachments/assets/de4ea3b2-fb20-43bc-85c4-54c006768598"></video>
 
 *Demo video file is included in the package as `demo.mp4`*
+
 
 **Demo highlights using [github/awesome-copilot](https://github.com/github/awesome-copilot):**
 - 377 total commits analyzed
