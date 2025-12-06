@@ -31,7 +31,7 @@ Organizations adopting AI coding tools like GitHub Copilot, Windsurf, and Cursor
 - **Team Insights**: Identify which teams and developers are leveraging AI assistance
 - **Trend Analysis**: Track AI usage growth over time
 - **Privacy-Friendly**: Analyzes local git data without sending telemetry to external services
-- **Open Source**: Apache 2.0 licensed, fully customizable for your organization's needs
+- **Open Source**: MIT licensed, fully customizable for your organization's needs
 
 ## Table of Contents
 
@@ -499,7 +499,7 @@ ai-usage-measurement-framework/
 ├── tests/                       # Test suite
 ├── pyproject.toml              # Project configuration (uv/pip)
 ├── Taskfile.yaml               # Task automation
-├── LICENSE                     # Apache 2.0 license
+├── LICENSE                     # MIT license
 ├── README.md                   # This file
 └── CONTRIBUTING.md             # Contribution guidelines
 ```
@@ -591,7 +591,7 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 

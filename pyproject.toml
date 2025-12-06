@@ -10,7 +10,7 @@ name = "ai-usage-measurement-framework"
 version = "0.1.0"
 description = "Measure and analyze AI-assisted development in git repositories"
 readme = "README.md"
-license = {text = "Apache-2.0"}
+license = {text = "MIT"}
 authors = [
     {name = "AI Usage Measurement Framework Contributors"}
 ]
@@ -18,7 +18,7 @@ keywords = ["ai", "git", "analytics", "copilot", "development", "metrics", "gith
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
